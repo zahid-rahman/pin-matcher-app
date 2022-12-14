@@ -1,5 +1,5 @@
 export default function Result({ result, ...props }) {
-    if(result === undefined) {
+    if(result === undefined || result === "") {
         return null;
     }
     return (

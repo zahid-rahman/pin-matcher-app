@@ -7,7 +7,8 @@ import Result from "./Result";
 export default function AppLayout() {
     const [generatedPin, setGeneratedPin] = useState()
     const [pastedPin, setPastedPin] = useState()
-    const [result, setResult] = useState()
+    const [result, setResult] = useState("")
+    const [title, setTitle] = useState('copy pin')
 
     const generatePinAndSave = () => {
         const pin = generetedPin()
@@ -15,8 +16,14 @@ export default function AppLayout() {
     }
 
     const copyPin = () => {
-        document.querySelector("[title='generated-pin']").select()
-        document.execCommand('copy')
+        const element = document.querySelector("[title='generated-pin']")
+        if(element.value === "" || element.value === undefined) {
+            alert('Please generate your pin first')
+        } else {
+            document.querySelector("[title='generated-pin']").select()
+            document.execCommand('copy')
+            setTitle('copied')
+        }
     }
 
     const onChangeHandler = (event) => {
@@ -25,7 +32,12 @@ export default function AppLayout() {
     
     const submitPinForChecking = (event) => {
         event.preventDefault();
-        if(generatedPin === Number(pastedPin)) {
+        if(pastedPin === undefined) {
+            alert('paste your copied pin please')
+            setResult()
+        }
+
+        if(pastedPin && (generatedPin === Number(pastedPin))) {
             setResult(true)
         } else {
             setResult(false)
@@ -43,7 +55,7 @@ export default function AppLayout() {
             {/* app */}
             <InputBox placeholder="generate pin" title="generated-pin" value={generatedPin} readOnly />
             <Button style={{margin: "0px 0px 0px 5px"}} onClick={generatePinAndSave}>generate pin</Button>
-            <Button style={{margin: "0px 0px 0px 5px"}} onClick={copyPin}>copy pin</Button>
+            <Button style={{margin: "0px 0px 0px 5px"}} onClick={copyPin}>{title}</Button>
             <Button style={{margin: "0px 0px 0px 5px"}} onClick={resetAll}>reset</Button>
             <br />
             <br />
